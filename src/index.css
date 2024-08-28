@@ -95,3 +95,8 @@ input, textarea {
 .footer {
   @apply bg-accent text-white p-4 mt-8 text-center;
 }
+
+/* Header Styles */
+.header-bottom {
+  @apply bg-secondary text-white py-1 flex justify-center items-center;
+}

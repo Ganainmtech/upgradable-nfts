@@ -1,8 +1,8 @@
+// Header.js
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-
+import CarouselComponent from "./CarouselComponent";
 import { Link } from "react-router-dom";
 import ConnectButton from "./ConnectButton";
 import SelectNetworkComponent from "./SelectNetworkComponent";
@@ -18,10 +18,24 @@ export function Header() {
   };
 
   return (
-    <AppBar sx={{ backgroundColor: "#1A171A" }} position="sticky">
+    <AppBar
+      sx={{
+        backgroundColor: "#1A171A",
+        paddingTop: 0.5, // Reduced top padding
+        paddingBottom: 0.5, // Reduced bottom padding
+      }}
+      position="sticky"
+    >
       <DropdownMenu isOpen={isSidesheetOpen} onClose={handleDrawerToggle} />
 
-      <Toolbar>
+      <Toolbar
+        sx={{
+          padding: '0 !important',
+          height: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -30,36 +44,28 @@ export function Header() {
         >
           <MdMenu />
         </IconButton>
-        <Link to="/">
-          <img src="/TL_large_white.png" alt="logo" className="mr-2 h-12 p-1" />
-        </Link>
-        <Typography
-          component="div"
-          sx={{
-            fontFamily: "Josefin Slab",
-            flexGrow: 1,
-            fontWeight: 400,
-            fontSize: {
-              xs: "1rem",
-              sm: "1.25rem",
-              md: "1.5rem",
-              lg: "1.75rem",
-            },
-            ":hover": {
-              cursor: "pointer",
-            },
-            ml: { xs: 2, sm: 0 },
-            visibility: { xs: "hidden", sm: "visible" },
-          }}
+        <Link
+          to="https://developer.algorand.org/algokit/?utm_source=af_employee&utm_medium=social&utm_campaign=algokit_sarajane&utm_content=download&utm_term=EME"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: 'flex', alignItems: 'center', marginLeft: '8px' }} // Adjust margin to reduce spacing
         >
-          Mint & Upgrade
-        </Typography>
+          <CarouselComponent
+            images={[
+              { path: "/algoblue.png" },
+              { path: "/algowhite.png" },
+              { path: "/algoteal.png" },
+            ]}
+            style={{ width: '75px', height: '75px' }} // Adjust width to fit better
+          />
+        </Link>
+        <div style={{ flexGrow: 1 }}></div>
         <SelectNetworkComponent />
         <ConnectButton />
       </Toolbar>
-      <div className="bg-secondary text-primary-black flex py-1 justify-center items-center">
+      <div className="header-bottom">
         <p className="text-center text-sm">
-          Welcome to the Mint & Upgrade platform! Explore our features and get started with your projects.
+          Welcome! Use this application to mint and upgrade your Algorand NFTs!
         </p>
       </div>
     </AppBar>

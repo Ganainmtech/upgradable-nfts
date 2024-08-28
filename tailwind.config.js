@@ -1,3 +1,4 @@
+// tailwind.config.js
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -13,8 +14,8 @@ module.exports = {
         'secondary-light': '#2ECFCC',
         'accent-light': '#334250',
         white: '#FFFFFF',
-        'dark-bg': '#0F1A2D',  // Dark background color
-        'dark-text': '#E0E0E0',  // Light text color for contrast
+        'dark-bg': '#0F1A2D',
+        'dark-text': '#E0E0E0',
       },
       fontFamily: {
         aeonik: ['Aeonik', 'sans-serif'],
@@ -35,4 +36,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

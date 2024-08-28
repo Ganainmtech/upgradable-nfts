@@ -40,7 +40,7 @@ export function Footer() {
         </div>
         <div className="flex gap-4 text-gray-400 sm:justify-center">
           <a
-            href="https://twitter.com/example"
+            href="https://x.com/AlgoFoundation"
             target="_blank"
             className="opacity-80 transition-opacity hover:opacity-100"
             rel="noreferrer"
@@ -55,7 +55,7 @@ export function Footer() {
             </svg>
           </a>
           <a
-            href="https://discord.gg/example"
+            href="https://discord.gg/algorand"
             target="_blank"
             className="opacity-80 transition-opacity hover:opacity-100"
             rel="noreferrer"
@@ -71,7 +71,7 @@ export function Footer() {
           </a>
           <a
             className="opacity-80 transition-opacity hover:opacity-100"
-            href="https://github.com/example/repo"
+            href="https://github.com/Ganainmtech/upgradable-nfts"
             target="_blank"
             rel="noreferrer"
           >
