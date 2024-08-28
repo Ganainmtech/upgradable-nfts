@@ -51,34 +51,15 @@ export function Header() {
             ml: { xs: 2, sm: 0 },
             visibility: { xs: "hidden", sm: "visible" },
           }}
-        ></Typography>
+        >
+          Mint & Upgrade
+        </Typography>
         <SelectNetworkComponent />
         <ConnectButton />
       </Toolbar>
-      <div className="bg-secondary-orange text-black flex py-1 justify-center items-center">
+      <div className="bg-secondary text-primary-black flex py-1 justify-center items-center">
         <p className="text-center text-sm">
-          You can read more about Infinity Mode{" "}
-          <a
-            href="https://loafpickle.medium.com/evil-tools-infinity-mode-1bd70ec71c2b"
-            target="_blank"
-            rel="noreferrer"
-            className="font-semibold hover:text-green-800 transition"
-          >
-            🔗 here!
-          </a>
-        </p>
-      </div>
-      <div className="bg-banner-grey text-white overflow-hidden text-center">
-        <p className="text-center text-sm ticker-text">
-          Improve your wallet experience with the:{" "}
-          <a
-            href="https://wallet.wen.tools/"
-            target="_blank"
-            rel="noreferrer"
-            className="font-semibold hover:text-green-800 transition"
-          >
-            Wen Wallet!
-          </a>
+          Welcome to the Mint & Upgrade platform! Explore our features and get started with your projects.
         </p>
       </div>
     </AppBar>

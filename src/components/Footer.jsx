@@ -3,27 +3,26 @@ import { Tooltip } from "@mui/material";
 export function Footer() {
   return (
     <footer className="bg-primary-black text-white">
-      <div className="px-4 flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 gap-y-1 md:flex-row md:justify-between">
+      <div className="px-4 flex w-full flex-col items-center justify-center border-t border-gray-700 py-4 gap-y-1 md:flex-row md:justify-between">
         <span className="text-xs mb-2">
           &copy; {new Date().getFullYear()}{" "}
           <a
-            href="https://wen.tools/"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/"
+            className="font-semibold hover:text-secondary transition"
           >
-            Wen.Tools
+            Mint & Upgrade
           </a>
         </span>
         <div className="flex flex-row items-center justify-center gap-3 sm:absolute sm:left-1/2 sm:-translate-x-1/2">
-          <Tooltip title="supported by xGov">
+          <Tooltip title="Powered by our technology">
             <a
-              href="https://xgov.algorand.foundation?ref=eviltools"
+              href="https://developer.algorand.org/algokit/?utm_source=af_employee&utm_medium=social&utm_campaign=algokit_sarajane&utm_content=download&utm_term=EME"
               target="_blank"
               rel="noopener noreferrer"
             >
               <img
-                src={"/af_logo.svg"}
-                alt="af-logo"
+                src={"/af_logo.png"}
+                alt="tech-logo"
                 width={64}
                 height={64}
                 className="mb-2 md:mb-0"
@@ -31,17 +30,17 @@ export function Footer() {
             </a>
           </Tooltip>
           <a
-            href="https://algonode.io?ref=eviltools"
+            href="https://nodely.io/"
             target="_blank"
-            rel="noreferrer noopener"
+            rel="noopener noreferrer"
             className="font-normal text-primary-gray transition text-xs text-center hover:text-white"
           >
-            powered by <br /> Algonode.io
+            Powered by <br /> Nodely.io
           </a>
         </div>
-        <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
+        <div className="flex gap-4 text-gray-400 sm:justify-center">
           <a
-            href="https://twitter.com/loafpickle"
+            href="https://twitter.com/example"
             target="_blank"
             className="opacity-80 transition-opacity hover:opacity-100"
             rel="noreferrer"
@@ -56,7 +55,7 @@ export function Footer() {
             </svg>
           </a>
           <a
-            href="https://discord.gg/Mw2p5C6hAT"
+            href="https://discord.gg/example"
             target="_blank"
             className="opacity-80 transition-opacity hover:opacity-100"
             rel="noreferrer"
@@ -72,7 +71,7 @@ export function Footer() {
           </a>
           <a
             className="opacity-80 transition-opacity hover:opacity-100"
-            href="https://github.com/LoafPickleWW/wen-tools"
+            href="https://github.com/example/repo"
             target="_blank"
             rel="noreferrer"
           >

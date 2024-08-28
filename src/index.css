@@ -2,26 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* Base Styles */
+body {
+  @apply bg-dark-bg text-dark-text font-inter;
 }
 
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
+a {
+  @apply text-secondary transition-colors duration-300;
+}
+a:hover {
+  @apply text-secondary-light;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold text-primary-light;
+}
+
+button {
+  @apply bg-secondary text-primary-light font-semibold py-2 px-4 rounded-md shadow-md transition-transform duration-300;
+}
+button:hover {
+  @apply bg-secondary-light transform scale-105;
+}
+
+input, textarea {
+  @apply border border-gray-600 rounded-md p-2 w-full bg-dark-bg text-dark-text placeholder-gray-400 focus:border-secondary-light focus:ring-2 focus:ring-secondary-light;
+}
+
+/* Tooltip Styles */
 .tooltip {
-  @apply invisible absolute;
+  @apply invisible absolute bg-secondary text-primary-light text-xs rounded-md px-2 py-1 shadow-md transition-opacity duration-300;
 }
 
 .has-tooltip:hover .tooltip {
-  @apply visible z-10;
+  @apply visible opacity-100;
 }
 
+/* Ticker Animation */
 @keyframes ticker {
   0% {
     transform: translateX(0);
@@ -31,10 +48,6 @@ input[type="number"] {
   }
 }
 
-/*
- * Most of the code for the ticker's marquee animation is based on:
- * https://stackoverflow.com/a/21233577
- */
 .ticker-text {
   display: inline-block;
   width: max-content;
@@ -44,10 +57,6 @@ input[type="number"] {
   animation: ticker 15s linear infinite;
 }
 
-/*
- * The ticker speed is higher at larger screen sizes, so make the animation
- * duration longer to decrease the ticker speed
- */
 @media (min-width: 600px) {
   .ticker-text {
     animation-duration: 20s;
@@ -60,13 +69,29 @@ input[type="number"] {
   }
 }
 
-/* Stop the animations for users who may be sensitive to motion */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .ticker-text {
     animation: none;
     width: auto;
     padding-left: 0;
-    padding-right: 0%;
-    margin: 0 auto 0;
+    padding-right: 0;
+    margin: 0 auto;
   }
+}
+
+/* Additional UI Elements */
+.navbar {
+  @apply bg-accent text-white p-4 shadow-md;
+}
+
+.card {
+  @apply bg-dark-bg border border-gray-700 rounded-md shadow-lg p-4 transition-transform duration-300;
+}
+.card:hover {
+  @apply transform scale-105 shadow-xl;
+}
+
+.footer {
+  @apply bg-accent text-white p-4 mt-8 text-center;
 }

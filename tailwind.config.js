@@ -1,36 +1,38 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./public/index.html",
+  ],
   theme: {
     extend: {
-      spacing: {
-        108: "27rem",
-      },
       colors: {
-        "orange-1000": "#C254414B",
-        "red-1000": "#801F19",
-        "special-red": "#7a0909",
-        "primary-orange": "#f57b14",
-        "primary-blue": "#6EC1E4",
-        "primary-yellow": "#FFC000",
-        "primary-red": "#BB000E",
-        "secondary-orange": "#f57b14",
-        "secondary-yellow": "#F7DF7C",
-        "primary-black": "#010002",
-        "primary-gray": "#D0D0D1",
-        "secondary-gray": "#393C3A",
-        "secondary-black": "#000a02",
-        "banner-grey": "#262626",
-        "text-white": "#f9fafb",        
+        primary: '#2D2DF1',
+        secondary: '#17CAC6',
+        accent: '#001324',
+        'primary-light': '#5858F0',
+        'secondary-light': '#2ECFCC',
+        'accent-light': '#334250',
+        white: '#FFFFFF',
+        'dark-bg': '#0F1A2D',  // Dark background color
+        'dark-text': '#E0E0E0',  // Light text color for contrast
       },
-      fontSize: {
-        xxs: "0.6rem",
+      fontFamily: {
+        aeonik: ['Aeonik', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
       },
-    },
-    fontFamily: {
-      sans: ["Poppins", "sans-serif"],
-      roboto: ["Roboto", "sans-serif"],
+      boxShadow: {
+        'default': '0 4px 6px rgba(0, 0, 0, 0.1)',
+        'md': '0 6px 12px rgba(0, 0, 0, 0.1)',
+        'lg': '0 10px 15px rgba(0, 0, 0, 0.1)',
+        'xl': '0 20px 25px rgba(0, 0, 0, 0.1)',
+      },
+      transitionDuration: {
+        '300': '300ms',
+      },
+      animation: {
+        ticker: 'ticker 15s linear infinite',
+      },
     },
   },
   plugins: [],
-};
+}
