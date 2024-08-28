@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.tooltip {
+  @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-10;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/*
+ * Most of the code for the ticker's marquee animation is based on:
+ * https://stackoverflow.com/a/21233577
+ */
+.ticker-text {
+  display: inline-block;
+  width: max-content;
+  padding-left: 100%;
+  padding-right: 10%;
+  will-change: transform;
+  animation: ticker 15s linear infinite;
+}
+
+/*
+ * The ticker speed is higher at larger screen sizes, so make the animation
+ * duration longer to decrease the ticker speed
+ */
+@media (min-width: 600px) {
+  .ticker-text {
+    animation-duration: 20s;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ticker-text {
+    animation-duration: 30s;
+  }
+}
+
+/* Stop the animations for users who may be sensitive to motion */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-text {
+    animation: none;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0%;
+    margin: 0 auto 0;
+  }
+}
