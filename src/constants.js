@@ -31,23 +31,6 @@ export const CREATOR_WALLETS = [];
 
 export const PREFIXES = [];
 
-// TOOLS
-export const TOOLS = [
-  {
-    id: "simple_mint",
-    label: "🌿 Simple Mint",
-    description: "Easily Inscribe an Asset on Algorand",
-    path: "/simple-mint",
-    category: "mint",
-  },
-  {
-    id: "simple_update",
-    label: "⬆️ Simple Update",
-    description: "Easily update your Mutable Inscriptions",
-    path: "/simple-update",
-    category: "mint",
-  },
-];
 
 // array of external links to be displayed in the dropdown menu
 // icon can be any react element

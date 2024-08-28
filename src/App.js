@@ -4,8 +4,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { SimpleMint } from "./pages/SimpleMint";
-import { SimpleUpdate } from "./pages/SimpleUpdate";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
@@ -28,8 +26,6 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/simple-mint" element={<SimpleMint />} />
-          <Route path="/simple-update" element={<SimpleUpdate />} />
           <Route path="*" element={<Home />} />
         </Routes>
         <Footer />
