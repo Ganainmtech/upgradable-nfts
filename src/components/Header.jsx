@@ -44,10 +44,8 @@ export function Header() {
         >
           <MdMenu />
         </IconButton>
-        <Link
-          to="https://developer.algorand.org/algokit/?utm_source=af_employee&utm_medium=social&utm_campaign=algokit_sarajane&utm_content=download&utm_term=EME"
-          target="_blank"
-          rel="noopener noreferrer"
+        <a
+          href="/"
           style={{ display: 'flex', alignItems: 'center', marginLeft: '8px' }} // Adjust margin to reduce spacing
         >
           <CarouselComponent
@@ -58,7 +56,7 @@ export function Header() {
             ]}
             style={{ width: '75px', height: '75px' }} // Adjust width to fit better
           />
-        </Link>
+        </a>
         <div style={{ flexGrow: 1 }}></div>
         <SelectNetworkComponent />
         <ConnectButton />
