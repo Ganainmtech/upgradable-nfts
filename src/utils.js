@@ -82,7 +82,7 @@ export function getNfdomainAPIURL() {
 }
 
 export function getAssetPreviewURL(assetID) {
-  return "https://wallet.wen.tools/asset/" + assetID;
+  return "https://lora.algokit.io/testnet/asset/" + assetID;
   // const networkType = localStorage.getItem("networkType");
   // if (networkType === "mainnet") {
   //   return "https://explorer.perawallet.app/asset/" + assetID;
@@ -92,7 +92,7 @@ export function getAssetPreviewURL(assetID) {
 }
 
 export function getTokenPreviewURL(assetID) {
-  return "https://wallet.wen.tools/asset/" + assetID;
+  return "https://lora.algokit.io/testnet/asset/" + assetID;
   // const networkType = localStorage.getItem("networkType");
   // if (networkType === "mainnet") {
   //   return "https://allo.info/asset/" + assetID;
