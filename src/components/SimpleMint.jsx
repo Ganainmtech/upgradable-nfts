@@ -56,6 +56,14 @@ export function SimpleMint() {
   const [processStep, setProcessStep] = useState(0);
   const [transaction, setTransaction] = useState(null);
   const [createdAssetID, setCreatedAssetID] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+    }
+  };
 
   const TraitMetadataInputField = (id, type) => {
     return (
@@ -322,36 +330,39 @@ const waitForConfirmation = async function (algodclient, txId) {
     <div className="w-full flex justify-center py-5">
       <div className="max-w-4xl w-full flex flex-col items-center">
         <div className="w-full flex justify-center mb-4">
-          <h1 className="text-3xl font-semibold text-gray-800">
-            Simple ARC19 NFT Minting Tool
-          </h1>
+          {/* Placeholder for a title or other elements */}
         </div>
-        <div className="w-full p-4 bg-white rounded-md shadow-md">
-          <form
-            className="w-full flex flex-col gap-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              mint();
-            }}
-          >
+  
+        <div className="minting-container">
+          {selectedImage && (
+            <div className="image-preview mb-6 flex justify-center">
+              <img
+                src={selectedImage}
+                alt="NFT Preview"
+                className="w-full max-w-xs rounded-md border border-gray-600"
+              />
+            </div>
+          )}
+  
+          <form className="minting-form">
             {/* Name and Unit Name Fields */}
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col md:flex-row md:space-x-4">
+            <div className="flex flex-col space-y-6">
+              <div className="flex flex-col md:flex-row md:space-x-6">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
                   <input
                     type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-blue focus:border-primary-blue sm:text-sm"
+                    placeholder="Asset Name *"
+                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-blue focus:border-primary-blue sm:text-sm"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
   
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Unit Name</label>
                   <input
                     type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-blue focus:border-primary-blue sm:text-sm"
+                    placeholder="Unit Name *"
+                    className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-blue focus:border-primary-blue sm:text-sm"
                     value={formData.unitName}
                     onChange={(e) => setFormData({ ...formData, unitName: e.target.value })}
                   />
@@ -360,17 +371,17 @@ const waitForConfirmation = async function (algodclient, txId) {
             </div>
   
             {/* Total Supply and Decimals Fields */}
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-6 mt-6">
               <input
                 type="number"
-                placeholder="Total Supply"
+                placeholder="Total Supply *"
                 className="w-full md:w-1/2 p-2 border rounded"
                 value={formData.totalSupply}
                 onChange={(e) => setFormData({ ...formData, totalSupply: e.target.value })}
               />
               <input
                 type="number"
-                placeholder="Decimals"
+                placeholder="Decimals *"
                 className="w-full md:w-1/2 p-2 border rounded"
                 value={formData.decimals}
                 onChange={(e) => setFormData({ ...formData, decimals: e.target.value })}
@@ -378,25 +389,31 @@ const waitForConfirmation = async function (algodclient, txId) {
             </div>
   
             {/* Image Upload Field */}
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-6 mt-6">
               <input
                 type="file"
                 accept="image/*,video/*"
                 className="w-full md:w-1/2 p-2 border rounded"
-                onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setFormData({ ...formData, image: file });
+                    setSelectedImage(URL.createObjectURL(file));
+                  }
+                }}
               />
               <input
                 type="text"
-                placeholder="JWT Token"
+                placeholder="JWT Token *"
                 className="w-full md:w-1/2 p-2 border rounded"
                 value={formData.jwtToken}
                 onChange={(e) => setFormData({ ...formData, jwtToken: e.target.value })}
               />
-            </div>
+              </div>
   
             {/* Traits, Filters, and Extras Sections */}
             <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Traits</h2>
+              <h2 className="text-lg font-semibold md:flex-row gap-6 mt-6">Traits</h2>
               {formData.traits.map((trait) => TraitMetadataInputField(trait.id, "traits"))}
               <button
                 type="button"
@@ -416,7 +433,7 @@ const waitForConfirmation = async function (algodclient, txId) {
             </div>
   
             <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Filters</h2>
+              <h2 className="text-lg font-semibold md:flex-row gap-6 mt-6">Filters</h2>
               {formData.filters.map((filter) => TraitMetadataInputField(filter.id, "filters"))}
               <button
                 type="button"
@@ -436,7 +453,7 @@ const waitForConfirmation = async function (algodclient, txId) {
             </div>
   
             <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Extras</h2>
+              <h2 className="text-lg font-semibold md:flex-row gap-6 mt-6">Extras</h2>
               {formData.extras.map((extra) => TraitMetadataInputField(extra.id, "extras"))}
               <button
                 type="button"
@@ -461,6 +478,7 @@ const waitForConfirmation = async function (algodclient, txId) {
                 type="submit"
                 variant="contained"
                 color="primary"
+                onClick={mint}
                 disabled={processStep !== 0}
               >
                 Upload IPFS

@@ -26,7 +26,7 @@ button:hover {
 }
 
 input, textarea {
-  @apply border border-gray-600 rounded-md p-2 w-full bg-dark-bg text-dark-text placeholder-gray-400 focus:border-secondary-light focus:ring-2 focus:ring-secondary-light;
+  @apply border border-gray-600 rounded-md p-3 w-full bg-dark-bg text-dark-text placeholder-gray-400 focus:border-secondary-light focus:ring-2 focus:ring-secondary-light;
 }
 
 /* Tooltip Styles */
@@ -86,7 +86,7 @@ input, textarea {
 }
 
 .card {
-  @apply bg-dark-bg border border-gray-700 rounded-md shadow-lg p-4 transition-transform duration-300;
+  @apply bg-dark-bg border border-gray-700 rounded-md shadow-lg p-6 transition-transform duration-300;
 }
 .card:hover {
   @apply transform scale-105 shadow-xl;
@@ -99,4 +99,25 @@ input, textarea {
 /* Header Styles */
 .header-bottom {
   @apply bg-secondary text-white py-1 flex justify-center items-center;
+}
+
+/* ARC-19 Minting Box */
+.minting-container {
+  @apply bg-dark-bg border border-gray-700 rounded-md shadow-xl p-8 mx-auto max-w-lg;
+}
+
+.minting-title {
+  @apply text-primary-light text-3xl font-bold mb-8;
+}
+
+.image-preview {
+  @apply mb-6 flex justify-center;
+}
+
+.image-preview img {
+  @apply w-full max-w-md rounded-md border border-secondary-light shadow-md;
+}
+
+.image-upload-field {
+  @apply mb-6;
 }
