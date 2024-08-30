@@ -48,22 +48,12 @@ const simpleMintAtom = atomWithStorage('simpleMint', {
   ],
 });
 
-const smTokenAtom = atomWithStorage('smToken', "");
 
 export function SimpleMint() {
   const [formData, setFormData] = useAtom(simpleMintAtom);
-  const [token, setToken] = useAtom(smTokenAtom);
   const [processStep, setProcessStep] = useState(0);
   const [transaction, setTransaction] = useState(null);
-  const [createdAssetID, setCreatedAssetID] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedImage(URL.createObjectURL(file));
-    }
-  };
 
   const TraitMetadataInputField = (id, type) => {
     return (
@@ -311,7 +301,6 @@ const waitForConfirmation = async function (algodclient, txId) {
   
       if (assetID) {
         toast.success(`NFT minted successfully with asset id: ${assetID}`);
-        setCreatedAssetID(assetID);
         setTransaction(null);
         setFormData(RESET); // Reset form after successful minting
         setProcessStep(0); // Reset process step
