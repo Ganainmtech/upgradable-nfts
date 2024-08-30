@@ -416,7 +416,7 @@ export function SimpleUpdate() {
         <>
           <div className="flex flex-col md:flex-row justify-between">
             <button
-              className="rounded bg-secondary-orange hover:bg-secondary-orange/80  text-black px-4 py-1 mt-2"
+              className="rounded bg-secondary-orange hover:bg-secondary-orange/80 text-black px-4 py-1 mt-2"
               onClick={() => {
                 removeStoredData();
                 window.location.reload();
@@ -424,7 +424,7 @@ export function SimpleUpdate() {
             >
               Back
             </button>
-            <div className="focus:outline-nonetext-sm font-light leading-tight text-slate-200 mt-4 md:ml-2">
+            <div className="focus:outline-none text-sm font-light leading-tight text-slate-200 mt-4 md:ml-2">
               Asset:{" "}
               <a
                 className="font-medium text-slate-300 underline hover:text-slate-400 transition"
@@ -436,6 +436,24 @@ export function SimpleUpdate() {
               </a>
             </div>
           </div>
+          {formData.image_url && (
+            <div className="current-image-preview mb-6 flex justify-center">
+              <img
+                src={
+                  formData.image_url.startsWith("ipfs://")
+                    ? `${IPFS_ENDPOINT}${formData.image_url.replace("ipfs://", "")}`
+                    : formData.image_url
+                }
+                className="w-60 mx-auto mt-4 object-contain rounded-md"
+                alt="Current Asset Image"
+                id="current_asset_image"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = ""; // Clear the src on error
+                }}
+              />
+            </div>
+          )}
           <div className="mt-4 md:flex items-center text-start gap-x-4">
             <div className="flex flex-col">
               <label className="mb-2 text-sm leading-none text-gray-200">
@@ -487,17 +505,25 @@ export function SimpleUpdate() {
                   New Image <span className="text-xs italic">(optional)</span>
                 </label>
                 <input
-                  className="block w-64 text-sm border border-gray-200 rounded cursor-pointer bg-gray-300  focus:outline-none  text-black font-medium"
+                  className="block w-64 text-sm border border-gray-200 rounded cursor-pointer bg-gray-300 focus:outline-none text-black font-medium"
                   id="select_image"
                   type="file"
                   accept="image/*,video/*"
                   multiple={false}
                   required
                   onChange={(e) => {
-                    setFormData({
-                      ...formData,
-                      image: e.target.files[0],
-                    });
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setFormData({
+                          ...formData,
+                          image: file,
+                          imagePreview: reader.result, // Save the file preview URL
+                        });
+                      };
+                      reader.readAsDataURL(file);
+                    }
                   }}
                 />
               </div>
@@ -506,89 +532,54 @@ export function SimpleUpdate() {
               <label className="mb-2 text-sm leading-none text-gray-200">
                 ARC format
               </label>
-              <div className="inline-flex items-center space-x-2">
-                <input
-                  className="w-64 bg-gray-400 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
-                  value={formData.format}
-                  disabled
-                />
-              </div>
+              <input
+                className="w-64 bg-gray-400 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
+                value={formData.format}
+                disabled
+              />
             </div>
           </div>
-          {formData.image_url && (
-            <img
-              src={
-                formData.image_url.startsWith("ipfs://")
-                  ? `${IPFS_ENDPOINT}${formData.image_url.replace(
-                      "ipfs://",
-                      ""
-                    )}`
-                  : formData.image_url
-              }
-              className="w-60 mx-auto mt-4 object-contain rounded-md"
-              alt="asset"
-              id="asset_image"
-              onError={(e) => {
-                e.target.onerror = null;
-                window.document.getElementById("asset_image").remove();
-              }}
-            />
+          <p className="focus:outline-none text-sm font-semibold text-lg leading-tight text-gray-200 mt-2">
+              Upload an Image to see New Image - Optional
+            </p>
+          {formData.imagePreview && (
+            <div className="new-image-preview mb-6 flex justify-center">
+              <img
+                src={formData.imagePreview}
+                alt="New Asset Image Preview"
+                className="w-60 mx-auto mt-4 object-contain rounded-md border border-gray-600"
+                id="new_asset_image"
+              />
+            </div>
           )}
-          {formData.animation_url && (
-            <video
-              src={
-                formData.animation_url.startsWith("ipfs://")
-                  ? `${IPFS_ENDPOINT}${formData.animation_url.replace(
-                      "ipfs://",
-                      ""
-                    )}`
-                  : formData.animation_url
-              }
-              className="w-60 mx-auto mt-4 object-contain rounded-md"
-              alt="asset_video"
-              id="asset_video"
-              onError={(e) => {
-                e.target.onerror = null;
-                window.document.getElementById("asset_video").remove();
-              }}
-              controls
-              autoPlay
-            />
-          )}
-          <p className="focus:outline-nonetext-sm font-semibold text-lg leading-tight text-gray-200 mt-2">
+          <p className="focus:outline-none text-sm font-semibold text-lg leading-tight text-gray-200 mt-2">
             Property Metadata
           </p>
-          {["external_url", "description"].map((key) => {
-            return (
-              <div className="mb-2">
-                <input
-                  type="text"
-                  disabled
-                  id={key}
-                  className="w-24 md:w-28 bg-gray-300 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 placeholder:text-xs px-3 py-2 border rounded border-gray-200"
-                  value={key}
-                />
-                <input
-                  id={key}
-                  type="text"
-                  placeholder="(optional)"
-                  className="w-24 md:w-28 bg-gray-300 text-sm ml-2 font-medium text-center leading-none text-black placeholder:text-black/30 placeholder:text-sm px-3 py-2 border rounded border-gray-200"
-                  value={formData[key]}
-                  onChange={(e) => {
-                    setFormData({ ...formData, [key]: e.target.value });
-                  }}
-                  readOnly={formData.format === "ARC3"}
-                />
-              </div>
-            );
-          })}
-          <p className="focus:outline-nonetext-sm font-light leading-tight text-gray-200 mt-2">
+          {["external_url", "description"].map((key) => (
+            <div className="mb-2" key={key}>
+              <input
+                type="text"
+                disabled
+                id={key}
+                className="w-24 md:w-28 bg-gray-300 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 placeholder:text-xs px-3 py-2 border rounded border-gray-200"
+                value={key}
+              />
+              <input
+                id={key}
+                type="text"
+                placeholder="(optional)"
+                className="w-24 md:w-28 bg-gray-300 text-sm ml-2 font-medium text-center leading-none text-black placeholder:text-black/30 placeholder:text-sm px-3 py-2 border rounded border-gray-200"
+                value={formData[key]}
+                onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                readOnly={formData.format === "ARC3"}
+              />
+            </div>
+          ))}
+          <p className="focus:outline-none text-sm font-light leading-tight text-gray-200 mt-2">
             Traits
           </p>
           <div className="md:flex flex-col items-center text-start justify-center">
-            {formData.traits.map((metadata) => {
-              return TraitMetadataInputField(metadata.id, "traits");
-            })}
+            {formData.traits.map((metadata) => TraitMetadataInputField(metadata.id, "traits"))}
           </div>
           {formData.format !== "ARC3" && (
             <button
@@ -616,51 +607,12 @@ export function SimpleUpdate() {
               +
             </button>
           )}
-          <p className="focus:outline-nonetext-sm font-semibold text-xl leading-tight text-gray-200 mt-2">
-            Non-Rarity Filters
-          </p>
-          <p className="focus:outline-nonetext-sm font-light leading-tight text-gray-200 mt-2">
-            Filters
-          </p>
-          <div className="md:flex flex-col items-center text-start justify-center">
-            {formData.filters.map((metadata) => {
-              return TraitMetadataInputField(metadata.id, "filters");
-            })}
-          </div>
-          {formData.format !== "ARC3" && (
-            <button
-              className="rounded-md bg-primary-orange hover:bg-green-600 transition text-black px-4 py-1"
-              onClick={() => {
-                let lastId;
-                try {
-                  lastId = formData.filters[formData.filters.length - 1].id;
-                } catch (error) {
-                  lastId = 0;
-                }
-                setFormData({
-                  ...formData,
-                  filters: [
-                    ...formData.filters,
-                    {
-                      id: lastId + 1,
-                      category: "",
-                      name: "",
-                    },
-                  ],
-                });
-              }}
-            >
-              +
-            </button>
-          )}
           <div className="border-b-2 border-gray-400 w-1/2 my-4"></div>
-          <p className="focus:outline-nonetext-sm font-light leading-tight text-gray-200">
+          <p className="focus:outline-none text-sm font-light leading-tight text-gray-200">
             Extras
           </p>
           <div className="md:flex flex-col items-center text-start justify-center">
-            {formData.extras.map((metadata) => {
-              return TraitMetadataInputField(metadata.id, "extras");
-            })}
+            {formData.extras.map((metadata) => TraitMetadataInputField(metadata.id, "extras"))}
           </div>
           {formData.format !== "ARC3" && (
             <button
@@ -717,7 +669,7 @@ export function SimpleUpdate() {
                     >
                       here
                     </a>
-                  </p>{" "}
+                  </p>
                 </div>
               )}
               <div className="flex flex-col justify-center items-center w-[16rem]">
@@ -738,7 +690,7 @@ export function SimpleUpdate() {
                       </a>
                     )}
                     <div className="mt-4">
-                    <button
+                      <button
                         className="rounded bg-secondary-orange hover:bg-secondary-orange/80 transition text-black/90 font-semibold px-4 py-1 mb-3 w-full"
                         onClick={() => {
                           removeStoredData();
@@ -759,7 +711,6 @@ export function SimpleUpdate() {
                         Go to home
                       </Button>
                     </div>
-
                   </>
                 ) : processStep === 3 ? (
                   <>
@@ -820,4 +771,6 @@ export function SimpleUpdate() {
       )}
     </div>
   );
+  
+
 }

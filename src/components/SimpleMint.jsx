@@ -4,12 +4,14 @@ import { toast } from "react-toastify";
 import { useAtom } from 'jotai';
 import { atomWithStorage, RESET } from 'jotai/utils';
 import { Button } from "@mui/material";
+import { IPFS_ENDPOINT } from "../constants";
 import {
-  getNodeURL,
+  pinImageToPinata,
   createARC19AssetMintArray,
+  getNodeURL,
   signGroupTransactions,
   sliceIntoChunks,
-  pinImageToPinata,
+  getAssetPreviewURL,
 } from "../utils";
 
 // Atoms to manage state with Jotai
@@ -48,12 +50,14 @@ const simpleMintAtom = atomWithStorage('simpleMint', {
   ],
 });
 
+const suAssetIdAtom = atomWithStorage('suAssetId', "");
 
 export function SimpleMint() {
   const [formData, setFormData] = useAtom(simpleMintAtom);
   const [processStep, setProcessStep] = useState(0);
   const [transaction, setTransaction] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [assetID, setAssetID] = useAtom(suAssetIdAtom);
 
   const TraitMetadataInputField = (id, type) => {
     return (
@@ -315,6 +319,11 @@ const waitForConfirmation = async function (algodclient, txId) {
     }
   }  
 
+    /** Remove the locally stored data */
+    function removeStoredData() {
+      setFormData(RESET);
+    }
+
   return (
     <div className="w-full flex justify-center py-5">
       <div className="max-w-4xl w-full flex flex-col items-center">
@@ -332,7 +341,47 @@ const waitForConfirmation = async function (algodclient, txId) {
               />
             </div>
           )}
-  
+
+          {formData.image_url && (
+            <div className="new-image-preview mb-6 flex justify-center">
+              <img
+                src={
+                  formData.image_url.startsWith("ipfs://")
+                    ? `${IPFS_ENDPOINT}${formData.image_url.replace("ipfs://", "")}`
+                    : formData.image_url
+                }
+                className="w-full max-w-xs rounded-md border border-gray-600"
+                alt="New NFT Image Preview"
+                id="new_asset_image"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  window.document.getElementById("new_asset_image").remove();
+                }}
+              />
+            </div>
+          )}
+
+          {formData.animation_url && (
+            <div className="new-video-preview mb-6 flex justify-center">
+              <video
+                src={
+                  formData.animation_url.startsWith("ipfs://")
+                    ? `${IPFS_ENDPOINT}${formData.animation_url.replace("ipfs://", "")}`
+                    : formData.animation_url
+                }
+                className="w-full max-w-xs rounded-md border border-gray-600"
+                alt="New NFT Video Preview"
+                id="new_asset_video"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  window.document.getElementById("new_asset_video").remove();
+                }}
+                controls
+                autoPlay
+              />
+            </div>
+          )}
+
           <form className="minting-form">
             {/* Name and Unit Name Fields */}
             <div className="flex flex-col space-y-6">
@@ -462,30 +511,88 @@ const waitForConfirmation = async function (algodclient, txId) {
             </div>
   
             {/* Submit and Sign & Mint Buttons */}
-            <div className="flex justify-center gap-4 mt-4">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                onClick={mint}
-                disabled={processStep !== 0}
-              >
-                Upload IPFS
-              </Button>
-  
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                onClick={sendTransaction}
-                disabled={processStep !== 2 || !transaction}
-              >
-                Sign & Mint
-              </Button>
+            <div className="rounded bg-secondary-orange hover:bg-secondary-orange/80 transition text-black font-semibold px-4 py-1 mt-2">
+              {processStep === 4 ? (
+                <>
+                  <p className="pt-4 text-green-500 text-sm">
+                    Asset minted successfully!
+                    <br />
+                  </p>
+                  {assetID && (
+                    <a
+                      href={getAssetPreviewURL(assetID)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-primary-yellow hover:text-primary-yellow/80 transition text-lg py-2 animate-pulse"
+                    >
+                      View the Minted Asset
+                    </a>
+                  )}
+                  <div className="mt-4">
+                    <button
+                      className="rounded bg-secondary-orange hover:bg-secondary-orange/80 transition text-black/90 font-semibold px-4 py-1 mb-3 w-full"
+                      onClick={() => {
+                        removeStoredData();
+                        window.location.reload();
+                      }}
+                    >
+                      Mint another asset
+                    </button>
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      fullWidth={true}
+                      onClick={() => {
+                        removeStoredData();
+                      }}
+                    >
+                      Go to home
+                    </Button>
+                  </div>
+                </>
+              ) : processStep === 3 ? (
+                <>
+                  <p className="pt-4 text-green-500 animate-pulse text-sm">
+                    Sending transactions...
+                  </p>
+                </>
+              ) : processStep === 2 ? (
+                <>
+                  <p className="mt-1 text-green-200/60 text-sm animate-pulse">
+                    Transaction created!
+                  </p>
+                  <button
+                    id="sign_mint_transactions_id"
+                    className="rounded bg-secondary-orange hover:bg-secondary-orange/80 transition text-black font-semibold px-4 py-1 mt-2"
+                    onClick={sendTransaction}
+                    disabled={!transaction}
+                  >
+                    Sign & Mint
+                  </button>
+                </>
+              ) : processStep === 1 ? (
+                <div className="mx-auto flex flex-col">
+                  <div
+                    className="spinner-border animate-spin inline-block mx-auto w-8 h-8 border-4 rounded-full"
+                    role="status"
+                  ></div>
+                  Creating transaction...
+                </div>
+              ) : (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={mint}
+                  disabled={processStep !== 0}
+                >
+                  Upload IPFS
+                </Button>
+              )}
             </div>
           </form>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
