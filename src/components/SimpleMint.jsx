@@ -325,12 +325,6 @@ const waitForConfirmation = async function (algodclient, txId) {
     }
 
   return (
-    <div className="w-full flex justify-center py-5">
-      <div className="max-w-4xl w-full flex flex-col items-center">
-        <div className="w-full flex justify-center mb-4">
-          {/* Placeholder for a title or other elements */}
-        </div>
-  
         <div className="minting-container">
           {selectedImage && (
             <div className="image-preview mb-6 flex justify-center">
@@ -509,6 +503,29 @@ const waitForConfirmation = async function (algodclient, txId) {
                 Add Extra
               </button>
             </div>
+            <p className="focus:outline-none font-semibold text-lg leading-tight text-gray-200 mt-2">
+            Property Metadata
+          </p>
+          {["external_url", "description"].map((key) => (
+            <div className="mb-2" key={key}>
+              <input
+                type="text"
+                disabled
+                id={key}
+                className="w-24 md:w-28 bg-gray-300 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 placeholder:text-xs px-3 py-2 border rounded border-gray-200"
+                value={key}
+              />
+              <input
+                id={key}
+                type="text"
+                placeholder="(optional)"
+                className="w-24 md:w-28 bg-gray-300 text-sm ml-2 font-medium text-center leading-none text-black placeholder:text-black/30 placeholder:text-sm px-3 py-2 border rounded border-gray-200"
+                value={formData[key]}
+                onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                readOnly={formData.format === "ARC3"}
+              />
+            </div>
+          ))}
   
             {/* Submit and Sign & Mint Buttons */}
             <div className="rounded bg-secondary-orange hover:bg-secondary-orange/80 transition text-black font-semibold px-4 py-1 mt-2">
@@ -592,7 +609,5 @@ const waitForConfirmation = async function (algodclient, txId) {
             </div>
           </form>
           </div>
-        </div>
-      </div>
   );
 }

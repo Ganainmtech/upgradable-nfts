@@ -45,6 +45,7 @@ export function SimpleUpdate() {
   const [token, setToken] = useAtom(suTokenAtom);
   const [processStep, setProcessStep] = useState(0);
   const [transaction, setTransaction] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [assetID, setAssetID] = useAtom(suAssetIdAtom);
   const navigate = useNavigate();
 
@@ -411,6 +412,7 @@ export function SimpleUpdate() {
   }
 
   return (
+    <div className="minting-container">
     <div className="mx-auto text-white mb-4 text-center flex flex-col items-center max-w-[40rem] gap-y-2">
       {assetID !== "" && formData.name ? (
         <>
@@ -444,7 +446,7 @@ export function SimpleUpdate() {
                     ? `${IPFS_ENDPOINT}${formData.image_url.replace("ipfs://", "")}`
                     : formData.image_url
                 }
-                className="w-60 mx-auto mt-4 object-contain rounded-md"
+                className="w-60 mx-auto mt-4 object-contain rounded-md border border-secondary"
                 alt="Current Asset Image"
                 id="current_asset_image"
                 onError={(e) => {
@@ -454,13 +456,14 @@ export function SimpleUpdate() {
               />
             </div>
           )}
+
           <div className="mt-4 md:flex items-center text-start gap-x-4">
             <div className="flex flex-col">
               <label className="mb-2 text-sm leading-none text-gray-200">
                 Name
               </label>
               <input
-                className="w-64 bg-gray-400 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
+                className="w-48 bg-gray-400 text-sm font-medium text-center leading-tight text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
                 value={formData.name}
                 disabled
               />
@@ -470,7 +473,7 @@ export function SimpleUpdate() {
                 Unit name
               </label>
               <input
-                className="w-64 bg-gray-400 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
+                className="w-48 bg-gray-400 text-sm font-medium text-center leading-tight text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
                 value={formData.unitName}
                 disabled
               />
@@ -482,7 +485,7 @@ export function SimpleUpdate() {
                 Total supply
               </label>
               <input
-                className="w-64 bg-gray-400 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
+                className="w-48 bg-gray-400 text-sm font-medium text-center leading-tight text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
                 value={formData.totalSupply}
                 disabled
               />
@@ -492,43 +495,13 @@ export function SimpleUpdate() {
                 Decimals
               </label>
               <input
-                className="w-64 bg-gray-400 text-sm font-medium text-center leading-none text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
+                className="w-48 bg-gray-400 text-sm font-medium text-center leading-tight text-black placeholder:text-black/30 px-3 py-2 border rounded border-gray-400 disabled:cursor-not-allowed"
                 value={formData.decimals}
                 disabled
               />
             </div>
           </div>
-          <div className="mt-4 md:flex items-center text-start gap-x-4">
-            {formData.format === "ARC19" && (
-              <div className="flex flex-col md:mt-0 mt-4">
-                <label className="mb-2 text-sm leading-none text-gray-200">
-                  New Image <span className="text-xs italic">(optional)</span>
-                </label>
-                <input
-                  className="block w-64 text-sm border border-gray-200 rounded cursor-pointer bg-gray-300 focus:outline-none text-black font-medium"
-                  id="select_image"
-                  type="file"
-                  accept="image/*,video/*"
-                  multiple={false}
-                  required
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setFormData({
-                          ...formData,
-                          image: file,
-                          imagePreview: reader.result, // Save the file preview URL
-                        });
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                />
-              </div>
-            )}
-            <div className="flex flex-col md:mt-0 mt-4 mx-auto">
+          <div className="flex flex-col md:mt-0 mt-4 mx-auto">
               <label className="mb-2 text-sm leading-none text-gray-200">
                 ARC format
               </label>
@@ -538,21 +511,107 @@ export function SimpleUpdate() {
                 disabled
               />
             </div>
-          </div>
-          <p className="focus:outline-none text-sm font-semibold text-lg leading-tight text-gray-200 mt-2">
-              Upload an Image to see New Image - Optional
-            </p>
-          {formData.imagePreview && (
-            <div className="new-image-preview mb-6 flex justify-center">
-              <img
-                src={formData.imagePreview}
-                alt="New Asset Image Preview"
-                className="w-60 mx-auto mt-4 object-contain rounded-md border border-gray-600"
-                id="new_asset_image"
-              />
+            
+            <div className="mt-4 md:flex items-center text-start gap-x-4">
+              {formData.format === "ARC19" && (
+                <div className="flex flex-col md:mt-0 mt-4">
+                  <label className="mb-2 text-sm leading-none text-gray-200">
+                    New Image <span className="text-xs italic">(optional)</span>
+                  </label>
+                  <input
+                    className="block w-48 text-sm border border-gray-200 rounded cursor-pointer bg-gray-300 focus:outline-none text-black font-medium"
+                    id="select_image"
+                    type="file"
+                    accept="image/*,video/*"
+                    multiple={false}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        // Create a URL for the file and update the form data
+                        const imagePreviewUrl = URL.createObjectURL(file);
+                        setFormData({
+                          ...formData,
+                          image: file,
+                          imagePreview: imagePreviewUrl, // Update the image preview in state
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              )}
             </div>
-          )}
-          <p className="focus:outline-none text-sm font-semibold text-lg leading-tight text-gray-200 mt-2">
+
+              {formData.imagePreview && (
+                <div className="mt-4 flex justify-center">
+                  <img
+                    src={formData.imagePreview}
+                    alt="Preview"
+                    className="w-full max-w-xs rounded-md border border-secondary"
+                  />
+                </div>
+              )}
+
+            {/* Traits, Filters, and Extras Sections */}
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold md:flex-row gap-6 mt-6">Traits</h2>
+              {formData.traits.map((trait) => TraitMetadataInputField(trait.id, "traits"))}
+              <button
+                type="button"
+                className="w-full bg-blue-500 text-white p-2 rounded"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    traits: [
+                      ...formData.traits,
+                      { id: formData.traits.length + 1, category: "", name: "" },
+                    ],
+                  });
+                }}
+              >
+                Add Trait
+              </button>
+            </div>
+  
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold md:flex-row gap-6 mt-6">Filters</h2>
+              {formData.filters.map((filter) => TraitMetadataInputField(filter.id, "filters"))}
+              <button
+                type="button"
+                className="w-full bg-blue-500 text-white p-2 rounded"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    filters: [
+                      ...formData.filters,
+                      { id: formData.filters.length + 1, category: "", name: "" },
+                    ],
+                  });
+                }}
+              >
+                Add Filter
+              </button>
+            </div>
+  
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold md:flex-row gap-6 mt-6">Extras</h2>
+              {formData.extras.map((extra) => TraitMetadataInputField(extra.id, "extras"))}
+              <button
+                type="button"
+                className="w-full bg-blue-500 text-white p-2 rounded"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    extras: [
+                      ...formData.extras,
+                      { id: formData.extras.length + 1, category: "", name: "" },
+                    ],
+                  });
+                }}
+              >
+                Add Extra
+              </button>
+            </div>
+            <p className="focus:outline-none text-sm font-semibold leading-tight text-gray-200 mt-2">
             Property Metadata
           </p>
           {["external_url", "description"].map((key) => (
@@ -575,71 +634,6 @@ export function SimpleUpdate() {
               />
             </div>
           ))}
-          <p className="focus:outline-none text-sm font-light leading-tight text-gray-200 mt-2">
-            Traits
-          </p>
-          <div className="md:flex flex-col items-center text-start justify-center">
-            {formData.traits.map((metadata) => TraitMetadataInputField(metadata.id, "traits"))}
-          </div>
-          {formData.format !== "ARC3" && (
-            <button
-              className="rounded-md bg-primary-orange hover:bg-green-600 transition text-black px-4 py-1"
-              onClick={() => {
-                let lastId;
-                try {
-                  lastId = formData.traits[formData.traits.length - 1].id;
-                } catch (error) {
-                  lastId = 0;
-                }
-                setFormData({
-                  ...formData,
-                  traits: [
-                    ...formData.traits,
-                    {
-                      id: lastId + 1,
-                      category: "",
-                      name: "",
-                    },
-                  ],
-                });
-              }}
-            >
-              +
-            </button>
-          )}
-          <div className="border-b-2 border-gray-400 w-1/2 my-4"></div>
-          <p className="focus:outline-none text-sm font-light leading-tight text-gray-200">
-            Extras
-          </p>
-          <div className="md:flex flex-col items-center text-start justify-center">
-            {formData.extras.map((metadata) => TraitMetadataInputField(metadata.id, "extras"))}
-          </div>
-          {formData.format !== "ARC3" && (
-            <button
-              className="rounded-md bg-primary-orange hover:bg-green-600 transition text-black px-4 py-1"
-              onClick={() => {
-                let lastId;
-                try {
-                  lastId = formData.extras[formData.extras.length - 1].id;
-                } catch (error) {
-                  lastId = 0;
-                }
-                setFormData({
-                  ...formData,
-                  extras: [
-                    ...formData.extras,
-                    {
-                      id: lastId + 1,
-                      category: "",
-                      name: "",
-                    },
-                  ],
-                });
-              }}
-            >
-              +
-            </button>
-          )}
           {formData.format === "ARC3" ? (
             <p className="text-lg text-red-400 font-roboto">
               ARC3 assets can't be updated
@@ -769,6 +763,7 @@ export function SimpleUpdate() {
           </button>
         </div>
       )}
+    </div>
     </div>
   );
   

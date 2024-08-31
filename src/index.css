@@ -32,10 +32,13 @@ input, textarea {
 /* Tooltip Styles */
 .tooltip {
   @apply invisible absolute bg-secondary text-primary-light text-xs rounded-md px-2 py-1 shadow-md transition-opacity duration-300;
+  @apply transform -translate-y-2 opacity-0;
+  /* Added transform and opacity for smoother transition */
 }
 
 .has-tooltip:hover .tooltip {
-  @apply visible opacity-100;
+  @apply visible opacity-100 translate-y-0;
+  /* Smoothed out transition for the tooltip visibility */
 }
 
 /* Ticker Animation */
@@ -69,7 +72,6 @@ input, textarea {
   }
 }
 
-/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .ticker-text {
     animation: none;
@@ -120,4 +122,33 @@ input, textarea {
 
 .image-upload-field {
   @apply mb-6;
+}
+
+/* Custom Button Components for Reusability */
+.btn {
+  @apply bg-secondary text-primary-light font-semibold py-2 px-4 rounded-md shadow-md transition-transform duration-300;
+}
+.btn:hover {
+  @apply bg-secondary-light transform scale-105;
+}
+
+/* Custom Card Component for Reusability */
+.card-custom {
+  @apply bg-dark-bg border border-gray-700 rounded-md shadow-lg p-6 transition-transform duration-300;
+}
+.card-custom:hover {
+  @apply transform scale-105 shadow-xl;
+}
+
+/* Enhanced Color Contrast for Accessibility */
+.bg-dark-bg {
+  background-color: #1a1a1a; /* Darker background for better contrast */
+}
+
+.text-dark-text {
+  color: #e0e0e0; /* Lighter text color for better readability */
+}
+
+.text-primary-light {
+  color: #f0f0f0; /* Ensure the primary text color is accessible */
 }
